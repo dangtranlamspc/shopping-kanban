@@ -22,21 +22,25 @@ const Signup = () => {
 
     const [isAgree, setIsAgree] = useState(false);
 
+    const [signValue, setSignValue] = useState<SignUp>()
+
     const [form] = Form.useForm();
 
     const dispatch = useDispatch()
 
     const handleSignUp = async (values : SignUp) => {
-        const api = `/customers/add-new`
+        const api = `/customers/verify`
         setIsLoading(true)
         try {
-            const res = await handleAPI({url : api, data : values , method : 'post'})
+            const res = await handleAPI({url : api, data : {email: values.email} , method : 'post'})
             if (res.data) {
-                dispatch (addAuth(res.data))
-                localStorage.setItem('authData', JSON.stringify(res.data))
+                console.log(res.data)
+                setSignValue(values)
+                // dispatch (addAuth(res.data))
+                // localStorage.setItem('authData', JSON.stringify(res.data))
             }
 
-            router.push('/')
+            // router.push('/')
         } catch (error) {
             console.log(error)
         }finally{
