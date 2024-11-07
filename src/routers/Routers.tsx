@@ -1,11 +1,11 @@
 
 import HeaderComponent from '@/components/HeaderComponent';
 import { localDataNames } from '@/constants/appInfors';
-import { addAuth } from '@/redux/reducers/authReducer';
+import { addAuth, authSelector } from '@/redux/reducers/authReducer';
 import { Layout, Spin } from 'antd'
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const {Content, Footer, Header} = Layout
 
@@ -17,6 +17,8 @@ const Routers = ({ Component, pageProps }: any) => {
 
   const dispatch = useDispatch()
 
+  const auth = useSelector(authSelector);
+
   useEffect(()=>{
     getData()
   },[])
@@ -26,13 +28,15 @@ const Routers = ({ Component, pageProps }: any) => {
     res && dispatch(addAuth(JSON.parse(res)))
   };
 
+
+
   const renderContent = (
     <Content>
       <Component pageProps={pageProps} />
     </Content>
 )
-  return isLoading ? <Spin/> : path && path.includes('auth')
-  ? 
+  return isLoading ? (<Spin/> ): !auth || !auth.accesstoken
+  ?   
     (
       <Layout className='bg-white'>
         {renderContent}
@@ -40,8 +44,7 @@ const Routers = ({ Component, pageProps }: any) => {
     ) : (
     <Layout className='bg-white'>
       <HeaderComponent/>
-        {renderContent}
-      <Footer/>
+        <div>{renderContent}</div>
     </Layout>
   )
 }

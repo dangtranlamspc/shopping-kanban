@@ -1,6 +1,8 @@
 import handleAPI from '@/apis/handleApi'
-import { Button, Checkbox, Form, Input, Space, Typography } from 'antd'
+import { addAuth } from '@/redux/reducers/authReducer'
+import { Button, Checkbox, Form, Input, message, Space, Typography } from 'antd'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -9,13 +11,45 @@ const {Text, Title, Paragraph } = Typography;
 
 const Login = () => {
     const dispatch = useDispatch()
-    const router = useRouter()
-    const [isLoading, setIsLoading] = useState(false)
-    const [isRemember, setIsRemember] = useState(false)
-    const [form] = Form.useForm()
-    const handleLogin = async () => {
 
-    }
+    const router = useRouter()
+
+    const [isLoading, setIsLoading] = useState(false)
+
+    const [isRemember, setIsRemember] = useState(false)
+
+    const [form] = Form.useForm()
+
+    const searchParams = useSearchParams();
+
+    const id = searchParams.get('productId');
+
+	const slug = searchParams.get('slug');
+    
+    const handleLogin = async (values: { email: string; password: string }) => {
+		const api = `/customers/login`;
+		setIsLoading(true);
+
+		try {
+			const res = await handleAPI({
+				url: api,
+				data: values,
+				method: 'post',
+			});
+
+			dispatch(addAuth(res.data.data));
+			localStorage.setItem('authData', JSON.stringify(res.data));
+
+			router.push(id && slug ? `/products/${slug}/${id}` : '/');
+		} catch (error) {
+			console.log(error);
+			message.error(
+				'Đăng nhập thất bại, vui lòng kiểm tra lại email/password và thử lại'
+			);
+		} finally {
+			setIsLoading(false);
+		}
+	};
     
   return (
     <div>
@@ -41,8 +75,8 @@ const Login = () => {
                 <div className="container d-flex" style={{height : '100%', alignItems:'center'}}>
                     <div className='col-sm-12 col-md-12 col-lg-8 offset-lg-2'>
                         <div className="mt-4">
-                            <Typography.Title className='mt-0'>Velcome</Typography.Title>
-                            <Typography.Paragraph type='secondary'>Please login here</Typography.Paragraph>
+                            <Title className='mt-0'>Velcome</Title>
+                            <Paragraph type='secondary'>Please login here</Paragraph>
                         </div>
                         <Form
                             disabled={isLoading}
@@ -81,8 +115,8 @@ const Login = () => {
                                   Remember Me
                               </Checkbox>
                             </div>
-                            <div className="col text-right">
-                              <Link href={''}>Forgot Password ?</Link>
+                            <div className="col text-right">    
+                              <Link href={'/auth/forgot-password'}>Forgot Password ?</Link>
                             </div>
                         </div>
                         <div className="mt-4">
