@@ -1,7 +1,7 @@
 import axios from "axios";
 import queryString from "query-string";
 
-const baseURL = `http://192.168.102.252:3001`;
+const baseURL = `http://192.168.102.88:3001`;
 
 const axiosClient = axios.create({
     baseURL,

@@ -6,6 +6,7 @@ export interface CategoyModel {
 	description: string;
 	createdAt: string;
 	updatedAt: string;
+	children: CategoyModel[];
 	__v: number;
 }
 
@@ -21,6 +22,7 @@ export interface ProductModel {
 	__v: number;
 	isDeleted: boolean;
 	subItems: SubProductModel[];
+	price: number[];
 }
 
 export interface SubProductModel {
@@ -35,4 +37,7 @@ export interface SubProductModel {
 	createdAt: string;
 	updatedAt: string;
 	__v: number;
+	imgURL?: string;
+	count: number;
+	createdBy: string;
 }

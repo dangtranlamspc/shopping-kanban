@@ -1,5 +1,6 @@
 import handleAPI from '@/apis/handleApi'
-import { Button, Checkbox, Form, Input, Space, Typography } from 'antd'
+import { addAuth } from '@/redux/reducers/authReducer'
+import { Button, Checkbox, Form, Input, message, Space, Typography } from 'antd'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
@@ -13,8 +14,27 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [isRemember, setIsRemember] = useState(false)
     const [form] = Form.useForm()
-    const handleLogin = async () => {
+    const handleLogin = async (values : {email : string, password : string}) => {
+        const api = `/customers/login`;
 
+        setIsLoading(true)
+
+        try {
+            const res = await handleAPI({
+                url : api,
+                data : values,
+                method : 'post',
+            })
+
+            dispatch(addAuth(res.data))
+            localStorage.setItem('authData', JSON.stringify(res.data))
+            router.push('/')
+        } catch (error) {
+            console.log(error)
+            message.error('Đăng nhập thấy bại, vui lòng kiểm tra lại email/password và thử lại')
+        }finally{
+            setIsLoading(false)
+        }
     }
     
   return (
