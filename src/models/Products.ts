@@ -6,6 +6,7 @@ export interface CategoyModel {
 	description: string;
 	createdAt: string;
 	updatedAt: string;
+	image?: string;
 	children: CategoyModel[];
 	__v: number;
 }

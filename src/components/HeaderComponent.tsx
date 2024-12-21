@@ -36,7 +36,7 @@ const HeaderComponent = () => {
                 mode='horizontal'
                 items={[
                   {
-                    label : 'Home',
+                    label : <Link href={'/'}>Home</Link>,
                     key : 'home'
                   },
                   {

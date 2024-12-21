@@ -16,7 +16,7 @@ const CategoriesListCard = (props : Props) => {
     const [categories, setCategories] = useState<CategoyModel[]>([]);
 
     const WIDTH = window.innerWidth;
-    const isShowCategories = ['women', 'men', 'footer', 'kids'];
+    const isShowCategories = ['men','women', 'footwear', 'kids','indian--festive-wear','western-wear','product-features'];
 
     useEffect(() => {
 		getCategories();
