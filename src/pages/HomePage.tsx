@@ -7,18 +7,19 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Carousel, Divider, Space, Typography } from 'antd';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { Section, TabbarComponent } from '@/components';
+import ProductItem from '@/components/ProductItem';
 
 const { Title } = Typography;
 
 interface Props {
 	promotions: PromotionModel[];
 	categories: CategoyModel[];
-	// bestSellers: ProductModel[];
+	bestSellers: ProductModel[];
 }
 
 const HomePage = (props : Props) => {
 
-    const {promotions , categories} = props;
+    const {promotions , categories,bestSellers} = props;
 
     const [numOfColumn, setNumOfColumn] = useState<number>();
 
@@ -204,6 +205,15 @@ const HomePage = (props : Props) => {
                     </div>
                   ))}
 				      </Carousel>
+            </Section>
+            <Section>
+              <TabbarComponent title='Our Bestseller'/>
+              <div className='row'>
+                {bestSellers &&
+                  bestSellers.map((item) => (
+                    <ProductItem item={item} key={item._id} />
+                  ))}
+              </div>
             </Section>
         </div>
     </>

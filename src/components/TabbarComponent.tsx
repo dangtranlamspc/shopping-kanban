@@ -12,7 +12,7 @@ const {Title, Text, Paragraph} = Typography
 
 const TabbarComponent = (props : Props) => {
 
-    const {title, right , level, orentation} = props
+    const {title, right , level, orentation} = props;
 
   return (
     <div>

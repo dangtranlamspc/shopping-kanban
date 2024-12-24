@@ -7,12 +7,12 @@ import React, { useEffect,useState } from 'react'
 import HomePage from './HomePage';
 
 const Home = (data : any) => {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
   const pageProps = data.pageProps;
+  const [bestSellers, setBestSellers] = useState<ProductModel[]>([]);
   const [promotions, setPromotions] = useState<PromotionModel[]>([]);
   const [categories, setCategories] = useState<CategoyModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  
-
   useEffect(() => {
     getDatas();
   },[])
@@ -22,6 +22,7 @@ const Home = (data : any) => {
 		try {
 			await getPromotions();
 			await getCategories();
+			await getBestSeller();
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -29,21 +30,28 @@ const Home = (data : any) => {
 		}
 	};
 
-  const getPromotions = async () => {
+	const getBestSeller = async () => {
+		const res = await handleAPI({url : `/products/get-best-seller`})
+
+		res && res.data && setBestSellers(res.data);
+	}
+
+  	const getPromotions = async () => {
 		const res = await handleAPI({ url: `/promotion?limit=5` });
 
-		res && res.data && res.data && setPromotions(res.data);
+		res && res.data && setPromotions(res.data);
 	};
 
 	const getCategories = async () => {
 		const res = await handleAPI({ url: `/products/get-categories` });
-		res && res.data && res.data && setCategories(res.data);
+		res && res.data && setCategories(res.data);
 	};
-	
-  return isLoading ? (
+
+  	return isLoading ? (
 		<Skeleton />
 	) : (
 		<HomePage
+			bestSellers={bestSellers}
 			promotions={promotions}
 			categories={categories}
 		/>
@@ -60,16 +68,16 @@ export const getStaticProps = async () => {
 		const resCats = await fetch(`${appInfo.baseUrl}/products/get-categories`);
 		const resultCats = await resCats.json();
 
-		// const resBestSeller = await fetch(
-		// 	`${appInfo.baseUrl}/products/get-best-seller`
-		// );
-		// const resultsSeller = await resBestSeller.json();
+		const resBestSeller = await fetch(
+			`${appInfo.baseUrl}/products/get-best-seller`
+		);
+		const resultsSeller = await resBestSeller.json();
 
 		return {
 			props: {
 				promotions: result.data,
 				categories: resultCats.data,
-				// bestSellers: resultsSeller.data,
+				bestSellers: resultsSeller.data,
 			},
 		};
 	} catch (error) {

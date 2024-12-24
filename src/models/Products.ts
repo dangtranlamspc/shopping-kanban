@@ -18,6 +18,7 @@ export interface ProductModel {
 	description: string;
 	categories: string[];
 	supplier: string;
+	images: string[];
 	createdAt: string;
 	updatedAt: string;
 	__v: number;
@@ -31,11 +32,11 @@ export interface SubProductModel {
 	color: string;
 	price: number;
 	qty: number;
-	discount : number;
 	productId: string;
 	images: any[];
 	_id: string;
 	createdAt: string;
+	discount?: number;
 	updatedAt: string;
 	__v: number;
 	imgURL?: string;
