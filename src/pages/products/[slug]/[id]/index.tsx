@@ -20,6 +20,8 @@ const ProductDetail = ({pageProps} : any) => {
 	} = pageProps.data.result.data;
   const [detail, setDetail] = useState<ProductModel>(product);
   const [subProductSelected, setSubProductSelected] = useState<SubProductModel>(subProducts[0] ?? []);
+  const [isChecked , setIsChecked] = useState<boolean>();
+  const [isDelete, setIsDelete] = useState<boolean>();
   return subProductSelected ?(
     <div>
       <HeadComponent title={detail.title} description={detail.description} url={`${appInfo.baseUrl}/products/${detail.slug}/${detail._id}`}/>
