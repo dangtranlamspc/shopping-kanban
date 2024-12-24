@@ -1,7 +1,7 @@
 import HeadComponent from '@/components/HeadComponent';
 import { appInfo } from '@/constants/appInfors';
 import { ProductModel, SubProductModel } from '@/models/Products';
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Breadcrumb, Button, Rate, Space, Tag, Typography} from "antd";
 import Link from 'next/link';
 import {VND} from "@/utils/handleCurrency";
@@ -19,9 +19,17 @@ const ProductDetail = ({pageProps} : any) => {
 		subProducts: SubProductModel[];
 	} = pageProps.data.result.data;
   const [detail, setDetail] = useState<ProductModel>(product);
-  const [subProductSelected, setSubProductSelected] = useState<SubProductModel>(subProducts[0] ?? []);
-  const [isChecked , setIsChecked] = useState<boolean>();
-  const [isDelete, setIsDelete] = useState<boolean>();
+  const [subProductSelected, setSubProductSelected] = useState<SubProductModel>();
+
+    useEffect(() => {
+        if (subProducts.length > 0) {
+            setSubProductSelected({
+                ...subProducts[0],
+                imgURL:
+                    subProducts[0].images.length > 0 ? subProducts[0].images[0] : '',
+            });
+        }
+    }, [subProducts]);
   return subProductSelected ?(
     <div>
       <HeadComponent title={detail.title} description={detail.description} url={`${appInfo.baseUrl}/products/${detail.slug}/${detail._id}`}/>
