@@ -13,6 +13,7 @@ import { ProductModel, SubProductModel } from '@/models/Products';
 import { authSelector } from '@/redux/reducers/authReducer';
 import {
 	addProduct,
+	CartItemModel,
 	cartSelector,
 	changeCount,
 } from '@/redux/reducers/cartReducer';
@@ -47,12 +48,16 @@ const ProductDetail = ({ pageProps }: any) => {
 		product: ProductModel;
 		subProducts: SubProductModel[];
 	} = pageProps.data.result.data;
+	
 	const relatedProducts = pageProps.data.itemCats.data;
 
 	const [detail, setdetail] = useState<ProductModel>(product);
+
 	const [subProductSelected, setSubProductSelected] =
 		useState<SubProductModel>();
+
 	const [count, setCount] = useState(1);
+
 	const [instockQuantity, setInstockQuantity] = useState(
 		subProductSelected?.qty
 	);
@@ -137,7 +142,7 @@ const ProductDetail = ({ pageProps }: any) => {
 							data: value,
 							method: 'post',
 						});
-						dispatch(addProduct(res.data.data));
+						dispatch(addProduct(res.data));
 					}
 				} catch (error) {
 					console.log(error);
@@ -273,7 +278,7 @@ const ProductDetail = ({ pageProps }: any) => {
 									</Tag>
 								</div>
 							</div>
-							{reviewDatas && (
+							{/* {reviewDatas && (
 								<Space>
 									<Rate
 										disabled
@@ -284,7 +289,7 @@ const ProductDetail = ({ pageProps }: any) => {
 									<Text type='secondary'>({reviewDatas?.count})</Text>
 									<Text type='secondary'>({reviewDatas.total}) reviews</Text>
 								</Space>
-							)}
+							)} */}
 
 							<div className='mt-3'>
 								<Space>
