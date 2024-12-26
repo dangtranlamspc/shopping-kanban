@@ -2,6 +2,7 @@ import handleAPI from '@/apis/handleApi'
 import { addAuth } from '@/redux/reducers/authReducer'
 import { Button, Checkbox, Form, Input, message, Space, Typography } from 'antd'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -12,8 +13,11 @@ const Login = () => {
     const dispatch = useDispatch()
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
+    const searchParams = useSearchParams()
     const [isRemember, setIsRemember] = useState(false)
     const [form] = Form.useForm()
+    const id = searchParams.get('productId')
+    const slug = searchParams.get('slug')
     const handleLogin = async (values : {email : string, password : string}) => {
         const api = `/customers/login`;
 
@@ -28,7 +32,7 @@ const Login = () => {
 
             dispatch(addAuth(res.data))
             localStorage.setItem('authData', JSON.stringify(res.data))
-            router.push('/')
+            router.push(id && slug ? `/products/${slug}/${id}` : '/')
         } catch (error) {
             console.log(error)
             message.error('Đăng nhập thấy bại, vui lòng kiểm tra lại email/password và thử lại')
